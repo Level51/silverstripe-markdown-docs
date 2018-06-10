@@ -32,7 +32,11 @@ class MarkdownDocs extends LeftAndMain implements PermissionProvider {
         $parsedown = new Parsedown();
         $tabs = array_map(function ($doc) use ($doTransformNames, $parsedown) {
             $documentData = $this->getDocumentData($doc);
-            $content = $parsedown->text(file_get_contents("../" . $documentData['path']));
+            $realPath = realpath("../" . $documentData['path']);
+            $rawContent = file_get_contents($realPath);
+            $rawContent = $this->transformImageLinks($rawContent, 'smb-backend/docs');
+
+            $content = $parsedown->text($rawContent);
             if ($doTransformNames === true && is_string($doc)) {
                 $documentData['name'] = ucfirst(mb_strtolower($documentData['name']));
             }
@@ -73,6 +77,23 @@ class MarkdownDocs extends LeftAndMain implements PermissionProvider {
         }
 
         return $document[array_keys($document)[0]];
+    }
+
+    /**
+     * Replaces relative image links with absolute ones.
+     *
+     * @param $rawContent
+     * @param $path
+     *
+     * @return null|string|string[]
+     */
+    private function transformImageLinks($rawContent, $path) {
+        return preg_replace_callback(
+            "/\!\[(.+)\]\((.*\.(jpg|jpeg|png|gif))\)/",
+            function ($matches) use ($path) {
+                return "![" . $matches[1] . "](" . $path . DIRECTORY_SEPARATOR . $matches[2] . ")";
+            },
+            $rawContent);
     }
 
     public function providePermissions() {
