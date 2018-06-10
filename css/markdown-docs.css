@@ -5,6 +5,11 @@
   margin: 16px 0;
 }
 
+.MarkdownDocs .tab h2,
+.MarkdownDocs .tab h3 {
+  margin-top: 28px;
+}
+
 .MarkdownDocs .tab h1:first-of-type {
   margin-top: 0;
 }
@@ -12,4 +17,9 @@
 .MarkdownDocs .tab ul {
   list-style-type: disc;
   margin-left: 20px;
+  margin-bottom: 16px;
+}
+
+.MarkdownDocs .tab pre {
+  margin-bottom: 16px;
 }
