@@ -16,7 +16,7 @@ Provides a simple readonly markdown document viewer in the backend.
 
 ```yaml
 # config.yml
-MarkdownDocs:
+Lvl51\MarkdownDocs\MarkdownDocs:
   transform_names: true # e.g. CHANGELOG --> Changelog (default: true)
   docs:
     - CHANGELOG.md

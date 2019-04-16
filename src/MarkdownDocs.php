@@ -1,12 +1,25 @@
 <?php
 
+namespace Lvl51\MarkdownDocs;
+
+use Parsedown;
+use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\TabSet;
+use SilverStripe\Security\PermissionProvider;
+
 class MarkdownDocs extends LeftAndMain implements PermissionProvider {
 
     private static $url_segment = 'docs';
 
     private static $menu_title = 'Documents';
 
-    private static $menu_icon = 'markdown-docs/img/documents.png';
+    private static $menu_icon = 'resources/vendor/level51/silverstripe-markdown-docs/client/dist/img/documents.png';
 
     private static $menu_priority = -1;
 
@@ -34,7 +47,7 @@ class MarkdownDocs extends LeftAndMain implements PermissionProvider {
             $documentData = $this->getDocumentData($doc);
             $realPath = realpath("../" . $documentData['path']);
             $rawContent = file_get_contents($realPath);
-            $rawContent = $this->transformImageLinks($rawContent, 'smb-backend/docs');
+            $rawContent = $this->transformImageLinks($rawContent, 'resources/app/docs');
 
             $content = $parsedown->text($rawContent);
             if ($doTransformNames === true && is_string($doc)) {
@@ -52,10 +65,17 @@ class MarkdownDocs extends LeftAndMain implements PermissionProvider {
         $fields = new FieldList($tabSet);
 
         // Create and config form
-        $form = CMSForm::create(
+        $form = Form::create(
             $this, 'EditForm', $fields, FieldList::create()
         )->addExtraClass('cms-content center cms-edit-form');
-        if ($form->Fields()->hasTabset()) $form->Fields()->findOrMakeTab('Root')->setTemplate('CMSTabSet');
+
+        $form->addExtraClass('flexbox-area-grow fill-height cms-content cms-edit-form');
+        $form->setAttribute('data-pjax-fragment', 'CurrentForm');
+
+        if ($form->Fields()->hasTabSet()) {
+            $form->Fields()->findOrMakeTab('Root')->setTemplate('SilverStripe\\Forms\\CMSTabSet');
+        }
+        $form->setHTMLID('Form_EditForm');
         $form->setTemplate($this->getTemplatesWithSuffix('_EditForm'));
 
         return $form;
@@ -99,8 +119,8 @@ class MarkdownDocs extends LeftAndMain implements PermissionProvider {
     public function providePermissions() {
         $permissions = parent::providePermissions();
         $permissions['CMS_ACCESS_' . self::class] = [
-            'name'     => _t('MarkdownDocs.CMS_ACCESS'),
-            'category' => _t('Permission.CMS_ACCESS_CATEGORY')
+            'name'     => _t(__CLASS__ . '.CMS_ACCESS'),
+            'category' => _t('SilverStripe\Security\Permission.CMS_ACCESS_CATEGORY')
         ];
 
         return $permissions;

@@ -1,0 +1,6 @@
+---
+Name: markdown-docs
+---
+SilverStripe\Admin\LeftAndMain:
+    extra_requirements_css:
+        - resources/vendor/level51/silverstripe-markdown-docs/client/dist/css/markdown-docs.css # TODO check non hard coded path

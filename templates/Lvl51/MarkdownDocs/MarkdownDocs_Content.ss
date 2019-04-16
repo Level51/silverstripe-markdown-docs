@@ -1,10 +1,10 @@
-<div id="settings-controller-cms-content" class="cms-content center cms-tabset $BaseCSSClasses" data-layout-type="border" data-pjax-fragment="Content" data-ignore-tab-state="true">
+<div id="settings-controller-cms-content" class="flexbox-area-grow fill-height cms-content cms-tabset $BaseCSSClasses" data-layout-type="border" data-pjax-fragment="Content" data-ignore-tab-state="true">
 
-    <div class="cms-content-header north">
+    <div class="cms-content-header north vertical-align-items">
         <% with $EditForm %>
-            <div class="cms-content-header-info">
+            <div class="cms-content-header-info flexbox-area-grow vertical-align-items">
                 <% with $Controller %>
-                    <% include CMSBreadcrumbs %>
+                    <% include SilverStripe\\Admin\\CMSBreadcrumbs %>
                 <% end_with %>
             </div>
 
