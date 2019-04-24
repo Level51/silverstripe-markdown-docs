@@ -1,6 +1,6 @@
 <?php
 
-namespace Lvl51\MarkdownDocs;
+namespace Level51\MarkdownDocs;
 
 use Parsedown;
 use SilverStripe\Admin\LeftAndMain;
